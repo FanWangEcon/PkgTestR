@@ -1,0 +1,476 @@
+---
+title: "Using devtools to Create a R Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using devtools to Create a R Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(PkgTestR)
+```
+
+In the example/tutorial below, we will create a R package from scratch. Here are some alternative tutorials:
+
+- [R Packages](https://r-pkgs.org/) by Hadley Wickham and Jenny Bryan.
+- [R package primer a minimal tutorial](https://kbroman.org/pkg_primer/) from [https://kbroman.org/](https://kbroman.org/).
+
+We will be using the following functions from [devtools](https://devtools.r-lib.org/index.html):
+
+- *devtools::create()*: create a package folder structure.
+- *devtools::document()*: generate .rd files in man and update NAMESPACE.
++ Examples and Vignettes:
+	- *devtools::run_examples()* to test examples from .R files, 
+	- *devtools::build_vignettes()* to create HTML etc for vignette files.
+- *devtools::check()*: builds and check package locally.
+- *devtools::install()*: building a package source directory into a single bundled file.
+- *devtools::load_all()*: load from source to memory
+
+Additionally, we also use:
+
+- *devtools::build()*: build the binary *tar.gz* file.
+- *devtools::build_manual()*: building the PDF manual including function markups. 
+
+## Initialize a Skeleton Package
+
+With [devtools](https://devtools.r-lib.org/), we create a new package.
+
+First, use the create function, [devtools:create("PATH_TO_NEW_PRJ_FOLDER", open=TRUE)](https://devtools.r-lib.org/reference/create.html), to generate the folder of interest. The *devtools:create(PATH, open)* function:
+
++ Creates these files: DESCRIPTION, NAMESPACE, .gitignore, .Rbuildignore, and PkgTestR.Rproj
+	- the *.gitignore* file can be replaced by the contents in github's [R.gitignore](https://github.com/github/gitignore/blob/main/R.gitignore)
++ Creates the R folder.
++ The second optional parameter *open* will start a new session in RStudio desktop with the package opened. When opened, bottom right panel will be set to the project directory. On the left, in the console panel, top bar status should have the project directory as well. Note that a hidden folder *.Rproj.user*, which is ignored in the *.gitignore* file, might begin populating with temporary contents when working in RStudio with the project.
+
+```{r, eval = FALSE}
+devtools::create("G:/repos/PkgTestR", open=TRUE)
+
+# ✔ Creating 'G:/repos/PkgTestR/'
+# ✔ Setting active project to 'G:/repos/PkgTestR'
+# ✔ Creating 'R/'
+# ✔ Writing 'DESCRIPTION'
+# Package: PkgTestR
+# Title: What the Package Does (One Line, Title Case)
+# Version: 0.0.0.9000
+# Authors@R (parsed):
+#     * First Last <first.last@example.com> [aut, cre] (YOUR-ORCID-ID)
+# Description: What the package does (one paragraph).
+# License: `use_mit_license()`, `use_gpl3_license()` or friends to
+#     pick a license
+# Encoding: UTF-8
+# Roxygen: list(markdown = TRUE)
+# RoxygenNote: 7.2.0
+# ✔ Writing 'NAMESPACE'
+# ✔ Writing 'PkgTestR.Rproj'
+# ✔ Adding '^PkgTestR\\.Rproj$' to '.Rbuildignore'
+# ✔ Adding '.Rproj.user' to '.gitignore'
+# ✔ Adding '^\\.Rproj\\.user$' to '.Rbuildignore'
+# ✔ Opening 'G:/repos/PkgTestR/' in new RStudio session
+# ✔ Setting active project to '<no active project>'
+```
+
+Second, go the the just created DESCRIPTION (e.g., "G:/repos/PkgTestR/DESCRIPTION") file, and modify Title and author information.
+
+```{bash, eval = FALSE}
+Package: PkgTestR
+Title: Testing the Creation of a R Package
+Version: 0.0.0.9000
+Authors@R:
+    person("Fan", "Wang", , "fanwecon@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2640-5420"))
+Description: Creating a R package and a website with pkgdown
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.0
+```
+
+Third, create a LICENSE file with for example [MIT License](https://en.wikipedia.org/wiki/MIT_License) in the root directory just created (e.g., [LICENSE](https://github.com/FanWangEcon/Tex4Econ/blob/master/nontex/rprjtemplate/LICENSE))
+
+## Write a Function
+
+Now, we write a function with markups, to be stored in a file in the */R* directory under root. Below, we have a slightly modified function from a [roxygen2](https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html) vignette. This function is in  *R/ff_rtest_add.R*.
+
+```{r, eval = FALSE}
+#' Add together two numbers
+#'
+#' @description This function provides an example with Roxygen2 markups.
+#' We can internally reference the sister function [ff_rtest_mul_basic()].
+#'
+#' @param ar_fl_x Scalar or vector of numbers
+#' @param ar_fl_y Scalar or vector of numbers
+#' @return The sum of \code{ar_fl_x} and \code{ar_fl_y}
+#' @export
+#' @examples
+#' ff_rtest_add_basic(1, 1)
+#' ff_rtest_add_basic(c(10,10), c(1,3))
+#' @references
+#' \url{https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html}
+#' @seealso [ff_rtest_mul_basic()] for multiplication.
+#' @author Fan Wang, \url{http://fanwangecon.github.io}
+ff_rtest_add_basic <- function(ar_fl_x, ar_fl_y) {
+  ar_fl_sum <- ar_fl_x + ar_fl_y
+  return(ar_fl_sum)
+}
+```
+
+## Document, Check, and Install Package
+
+In the steps below, we will run the functions from devtools shown below to create and install a package with several functions and vignettes. 
+
+```{r, eval = FALSE}
+# First
+devtools::document(pkg="G:/repos/PkgTestR")
+# Second
+devtools::run_examples(pkg="G:/repos/PkgTestR")
+devtools::build_vignettes(pkg="G:/repos/PkgTestR")
+# Third
+devtools::check(pkg="G:/repos/PkgTestR")
+# Fourth
+devtools::install(pkg="G:/repos/PkgTestR")
+```
+
+After running the file above, then can check from inside R *?ff_rtest_add_basic* and see the examples.
+
+### devtools::document()
+
+We will create documentations and install the package using [devtools](https://devtools.r-lib.org/).
+
+First, we will document the function that we have created, using [devtools::document](https://devtools.r-lib.org/reference/document.html). This updates *NAMESPACE* for functions that have *@export*, and also generate R documention files in the *man* folder.
+
+```{r, eval = FALSE}
+devtools::document(pkg="G:/repos/PkgTestR")
+```
+
+The function we have created, *ff_rtest_add_basic()*, now has a R documentation file, *man/ff_rtest_add_basic.Rd*. The file is automatically generated by roxygen2, and looks like this:
+
+```{rd, eval = FALSE}
+% Generated by roxygen2: do not edit by hand
+% Please edit documentation in R/ff_rtest_add.R
+\name{ff_rtest_add_basic}
+\alias{ff_rtest_add_basic}
+\title{Add together two numbers}
+\usage{
+ff_rtest_add_basic(ar_fl_x, ar_fl_y)
+}
+\arguments{
+\item{ar_fl_x}{Scalar or vector of numbers}
+
+\item{ar_fl_y}{Scalar or vector of numbers}
+}
+\value{
+The sum of \code{ar_fl_x} and \code{ar_fl_y}
+}
+\description{
+This function provides an example with Roxygen2 markups.
+We can internally reference the sister function \code{\link[=ff_rtest_mul_basic]{ff_rtest_mul_basic()}}.
+}
+\examples{
+ff_rtest_add_basic(1, 1)
+ff_rtest_add_basic(c(10,10), c(1,3))
+}
+\references{
+\url{https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html}
+}
+\seealso{
+\code{\link[=ff_rtest_mul_basic]{ff_rtest_mul_basic()}} for multiplication.
+}
+\author{
+Fan Wang, \url{http://fanwangecon.github.io}
+}
+```
+
+### Run Examples and Vignettes
+
+In the second step, we run examples, which are testing specific functions as come from Roxygen2 example snippets that enter the help file for functions, and we also generate files based on vignettes, which are tutorial general guidance files that might or might not be associated with specific functions in the package.
+
+#### devtools::run_examples()
+
+We test the examples for the functions [devtools::run_examples](https://devtools.r-lib.org/reference/run_examples.html).
+
+```{r, eval = FALSE}
+devtools::run_examples(pkg="G:/repos/PkgTestR")
+
+# ℹ Updating PkgTestR documentation
+# ℹ Loading PkgTestR
+# ── Running 1 example files ──────────────────────────────────────────────────────────────────── PkgTestR ──
+# ℹ Loading PkgTestR
+#
+# > # Name: ff_rtest_add_basic
+# > # Title: Add together two numbers
+# > # Aliases: ff_rtest_add_basic
+# >
+# > # ** Examples
+# >
+# > ff_rtest_add_basic(1, 1)
+# [1] 2
+#
+# > ff_rtest_add_basic(c(10,10), c(1,3))
+# [1] 11 13
+# ℹ Loading PkgTestR
+```
+
+#### devtools::build_vignettes()
+
+We write a vignette file, following the instructions on [this page](https://kbroman.org/pkg_primer/pages/vignettes.html). In fact, this present page is the vignette page. We can automatically create a vignette using [usethis::use_vignette](https://usethis.r-lib.org/reference/use_vignette.html). This will make some automated updates to DESCRIPTION and make other appropriate changes. 
+
+```{r, eval = FALSE}
+usethis::use_vignette("ffv_pkgdown_github", title = "Generate Package Website with pkgdown and Github Pages")
+
+# > usethis::use_vignette("ffv_pkgdown_github", title = "Generate Package Website with pkgdown and Github Pages")
+# ✔ Setting active project to 'G:/repos/PkgTestR'
+# ✔ Adding 'inst/doc' to '.gitignore'
+# ✔ Adding '*.html', '*.R' to 'vignettes/.gitignore'
+# ✔ Writing 'vignettes/ffv_pkgdown_github.Rmd'
+# • Modify 'vignettes/ffv_pkgdown_github.Rmd'
+```
+
+Note that, front matter at the top of an otherwise standard markdown file makes this a vignette file:
+
+```{md, eval = FALSE}
+---
+title: "Put the title of your vignette here"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Put the title of your vignette here}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+```
+
+Also note, need to add *VignetteBuilder* to the DESCRIPTION file under root:
+
+```{bash, eval = FALSE}
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
+```
+
+We use the [devtools::build_vignette](https://devtools.r-lib.org/reference/build_vignettes.html) function, which will generate a *doc* folder if that does not exist, and will store the HTML/R/RMD versions of the vignette file, with the same name, there. Note that this is different from where pkgdown will generate vignette files, which are to be a part of the project website.
+
+```{r, eval = FALSE}
+devtools::build_vignettes(pkg="G:/repos/PkgTestR")
+
+# ℹ Building PkgTestR vignettes
+# ℹ Moving ffv_devtools_create_package.html and ffv_devtools_create_package.R to doc/
+# ℹ Copying ffv_devtools_create_package.Rmd to doc/
+# ℹ Building vignette index
+```
+
+### devtools::check()
+
+Third, we update the documentation, build and load the package, and check the package locally with [devtools::check](https://devtools.r-lib.org/reference/check.html). This can be very slow, but it will show errors, warnings, and notes. All errors and warnings have to be resolved before the package can be released to CRAN. Note that *check()* also updates the documentation .Rd files based on the functions and Roxygen2 markups in the R folder.
+
+
+```{r, eval = FALSE}
+devtools::check(pkg="G:/repos/PkgTestR")
+
+# ℹ Updating PkgTestR documentation
+# ℹ Loading PkgTestR
+# ── Building ─────────────────────────────────────────────────────────────────────────────────── PkgTestR ──
+# Setting env vars:
+# • CFLAGS    : -Wall -pedantic -fdiagnostics-color=always
+# • CXXFLAGS  : -Wall -pedantic -fdiagnostics-color=always
+# • CXX11FLAGS: -Wall -pedantic -fdiagnostics-color=always
+# • CXX14FLAGS: -Wall -pedantic -fdiagnostics-color=always
+# • CXX17FLAGS: -Wall -pedantic -fdiagnostics-color=always
+# • CXX20FLAGS: -Wall -pedantic -fdiagnostics-color=always
+# ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ✔  checking for file 'G:\repos\PkgTestR/DESCRIPTION'
+# ─  preparing 'PkgTestR':
+# ✔  checking DESCRIPTION meta-information ...
+# ─  checking for LF line-endings in source and make files and shell scripts
+# ─  checking for empty or unneeded directories
+# ─  building 'PkgTestR_0.0.0.9000.tar.gz'
+#
+# ── Checking ─────────────────────────────────────────────────────────────────────────────────── PkgTestR ──
+# Setting env vars:
+# • _R_CHECK_CRAN_INCOMING_REMOTE_: FALSE
+# • _R_CHECK_CRAN_INCOMING_       : FALSE
+# • _R_CHECK_FORCE_SUGGESTS_      : FALSE
+# • NOT_CRAN                      : true
+# ── R CMD check ────────────────────────────────────────────────────────────────────────────────────────────
+# ─  using log directory 'C:/Users/fan/AppData/Local/Temp/RtmpozS3Eh/PkgTestR.Rcheck' (361ms)
+# ─  using R version 4.2.1 (2022-06-23 ucrt)
+# ─  using platform: x86_64-w64-mingw32 (64-bit)
+# ─  using session charset: UTF-8
+# ─  using options '--no-manual --as-cran'
+# ✔  checking for file 'PkgTestR/DESCRIPTION' ...
+# ─  this is package 'PkgTestR' version '0.0.0.9000'
+# ─  package encoding: UTF-8
+# ✔  checking package namespace information ...
+# ✔  checking package dependencies (1.3s)
+# ✔  checking if this is a source package
+# ✔  checking if there is a namespace ...
+# ✔  checking for executable files (467ms)
+# ✔  checking for hidden files and directories ...
+# ✔  checking for portable file names ...
+# ✔  checking serialization versions ...
+# ✔  checking whether package 'PkgTestR' can be installed (1.8s)
+# ✔  checking installed package size ...
+# ✔  checking package directory
+# ✔  checking for future file timestamps ...
+# ✔  checking DESCRIPTION meta-information (391ms)
+# ✔  checking top-level files
+# ✔  checking for left-over files ...
+# ✔  checking index information
+# ✔  checking package subdirectories ...
+# ✔  checking R files for non-ASCII characters ...
+# ✔  checking R files for syntax errors ...
+# ✔  checking whether the package can be loaded ...
+# ✔  checking whether the package can be loaded with stated dependencies ...
+# ✔  checking whether the package can be unloaded cleanly ...
+# ✔  checking whether the namespace can be loaded with stated dependencies ...
+# ✔  checking whether the namespace can be unloaded cleanly ...
+# ✔  checking loading without being on the library search path ...
+# ✔  checking dependencies in R code ...
+# ✔  checking S3 generic/method consistency (561ms)
+# ✔  checking replacement functions ...
+# ✔  checking foreign function calls ...
+# ✔  checking R code for possible problems (3.1s)
+# ✔  checking Rd files (344ms)
+# ✔  checking Rd metadata ...
+# ✔  checking Rd line widths ...
+# ✔  checking Rd cross-references ...
+# ✔  checking for missing documentation entries ...
+# ✔  checking for code/documentation mismatches (703ms)
+# ✔  checking Rd \usage sections (778ms)
+# ✔  checking Rd contents ...
+# ✔  checking for unstated dependencies in examples ...
+# ✔  checking examples (656ms)
+# ✔  checking for non-standard things in the check directory ...
+# ✔  checking for detritus in the temp directory ...
+#
+#
+# ── R CMD check results ─────────────────────────────────────────────────────────── PkgTestR 0.0.0.9000 ────
+# Duration: 15s
+#
+# 0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+```
+
+### devtools::install()
+
+Using [devtools::install](https://devtools.r-lib.org/reference/install.html), install the package locally.
+
+```{r, eval = FALSE}
+# devtools::build(pkg="G:/repos/PkgTestR", path="G:/repos/", manual=TRUE)
+devtools::install(pkg="G:/repos/PkgTestR", build=TRUE, force=TRUE)
+
+# ✔  checking for file 'G:\repos\PkgTestR/DESCRIPTION' (353ms)
+# ─  preparing 'PkgTestR':
+# ✔  checking DESCRIPTION meta-information ...
+# ─  checking for LF line-endings in source and make files and shell scripts
+# ─  checking for empty or unneeded directories
+# ─  building 'PkgTestR_0.0.0.9000.tar.gz'
+
+# Running "C:/PROGRA~1/R/R-42~1.1/bin/x64/Rcmd.exe" INSTALL \
+#   "C:\Users\fan\AppData\Local\Temp\RtmpozS3Eh/PkgTestR_0.0.0.9000.tar.gz" --install-tests
+# * installing to library 'C:/Users/fan/AppData/Local/R/win-library/4.2'
+# * installing *source* package 'PkgTestR' ...
+# ** using staged installation
+# ** R
+# ** byte-compile and prepare package for lazy loading
+# ** help
+# *** installing help indices
+# ** building package indices
+# ** testing if installed package can be loaded from temporary location
+# ** testing if installed package can be loaded from final location
+# ** testing if installed package keeps a record of temporary installation path
+# * DONE (PkgTestR)
+```
+
+## Build Binary and Manual 
+
+To share the package, we build a *.tar.gz* file, which is by default, if path is not specified, stored in the parent folder of the current package. We also create a manual for using the functions' Roxygen2 markups. 
+
+First, building the binary.
+
+```{r, eval = FALSE}
+# Update/build the binary
+devtools::build(pkg="G:/repos/PkgTestR", path="G:/repos/")
+
+# ✔  checking for file 'G:\repos\PkgTestR/DESCRIPTION'
+# ─  preparing 'PkgTestR':
+# ✔  checking DESCRIPTION meta-information ... 
+# ─  installing the package to build vignettes
+# ✔  creating vignettes (4.8s)
+# ─  checking for LF line-endings in source and make files and shell scripts
+# ─  checking for empty or unneeded directories
+# ─  building 'PkgTestR_0.0.0.9000.tar.gz'
+#    
+# [1] "G:/repos//PkgTestR_0.0.0.9000.tar.gz"
+```
+
+Second, creating the PDF Manual. This combines .Rd files together and comverts to PDF.
+
+```{r, eval = FALSE}
+# Create PDF
+devtools::build_manual(pkg="G:/repos/PkgTestR", path="G:/repos/")
+
+# Hmm ... looks like a package
+# Converting Rd files to LaTeX 
+# Creating pdf output from LaTeX ...
+# This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex)
+#  restricted \write18 enabled.
+# ...
+# ...
+# Output written on Rd2.pdf (3 pages, 67578 bytes).
+# Transcript written on Rd2.log.
+# Saving output to 'G:/repos//PkgTestR_0.0.0.9000.pdf' ...
+# Done
+```
+
+## Using an Installed Package
+
+After we have developed a function, with proper documentation/markup, and also vignette, we can now install the function, load it in memory, and start using the function. 
+
+When working with development code, conveninent to use the [devtools::load_all](https://devtools.r-lib.org/reference/load_all.html) function, which will take source code, and put it in memory. 
+
+```{r, eval = FALSE}
+# Load all code to memory
+devtools::load_all(path="G:/repos/PkgTestR")
+
+# Check out documentations for each function
+?PkgTestR::ff_rtest_add_basic
+?PkgTestR::ff_rtest_mul_basic
+
+# Test the functions
+PkgTestR::ff_rtest_add_basic(1,2)
+PkgTestR::ff_rtest_mul_basic(1,2)
+
+# Show all Vignettes
+vignette(package="PkgTestR")
+# Show a particular Vignette
+vignette("ffv_devtools_create_package", package="PkgTestR")
+```
+
+## pkgdown Build Site
+
+Use [pkgdown](https://pkgdown.r-lib.org/articles/pkgdown.html) to create a website to show the package.
+
+```{r, eval = FALSE}
+# Run once to configure package to use pkgdown
+usethis::use_pkgdown()
+# Run to build the website
+pkgdown::build_site()
+```
+
+## Errors 
+
+### Errors During Check 
+
+At the end of check, if the following message appears, that means we need to include *devtools* as the suggest field of DESCRIPTION. See [here](https://github.com/Bioconductor/BiocWorkshops2019/issues/32#issue-454624956).
+
+```{bash, eval = FALSE}
+checking for unstated dependencies in vignettes ... NOTE
+  '::' or ':::' import not declared from: 'devtools'
+  'library' or 'require' call not declared from: 'devtools'
+```
+

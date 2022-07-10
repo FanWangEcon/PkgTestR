@@ -1,0 +1,40 @@
+---
+title: "Generate Package Website with pkgdown and Github Pages"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Generate Package Website with pkgdown and Github Pages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(PkgTestR)
+```
+
+## Set up Git and Github 
+
+Develope a package, that includes functions with ROxygen2 documentation and also vignette files. Then, use functions from *usethis** to automate various git and github related tasks.
+
+First, initialize the project folder as a git folder, and then commit all existing non-gitignored files. See the *.gitignore* file for which documents are ignored. 
+
+```{r, eval = FALSE}
+usethis::use_git(message = "Initial commit")
+```
+
+nce per package:
+• use_git() — Activate git
+• use_github() — Connect to GitHub
+• use_github_actions() — Set up automated checks
+
+## Testing
+
+```{r, eval = FALSE}
+usethis::use_pkgdown_github_pages()
+```
