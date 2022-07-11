@@ -192,7 +192,7 @@ pkgdown::build_site()
 
 Once the repository is on github, can use [devtools::install_github](https://devtools.r-lib.org/reference/remote-reexports.html) to install the latest version of the package locally. 
 
-```{r, eval = False}
+```{r, eval = FALSE}
 # remove.packages("PkgTestR")
 devtools::install_github("FanWangEcon/PkgTestR")
 ```

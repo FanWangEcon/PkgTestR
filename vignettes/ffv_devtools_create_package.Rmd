@@ -165,7 +165,7 @@ After running the file above, then can check from inside R *?ff_rtest_add_basic*
 
 We will create documentations and install the package using [devtools](https://devtools.r-lib.org/).
 
-First, we will document the function that we have created, using [devtools::document](https://devtools.r-lib.org/reference/document.html). This updates *NAMESPACE* for functions that have *@export*, and also generate R documention files in the *man* folder.
+First, we will document the function that we have created, using [devtools::document()](https://devtools.r-lib.org/reference/document.html). This updates *NAMESPACE* for functions that have *@export*, and also generate R documention files in the *man* folder.
 
 ```{r, eval = FALSE}
 devtools::document(pkg="G:/repos/PkgTestR")
