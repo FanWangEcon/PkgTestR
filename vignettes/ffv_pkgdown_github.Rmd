@@ -18,13 +18,30 @@ knitr::opts_chunk$set(
 library(PkgTestR)
 ```
 
-## Set up Git and Github 
+## Set up Git, Github Repository, and Github Actions
 
-Develop a package, that includes functions with ROxygen2 documentation and also vignette files. Then, use functions from *usethis** to automate various git and github related tasks. See [here](https://github.com/FanWangEcon/Tex4Econ#9-gitpages-and-git) for how to set up git, github, github pages, etc, outside ofthe R environment. 
+Develop a package, that includes functions with ROxygen2 documentation and also vignette files. Then, use functions from *usethis** to automate various git and github related tasks. 
+
+We will use below:
+
+- usethis::use_git(message = "Initial commit"), this makes the folder a git folder.
+- usethis::use_github(private = FALSE), this creates the local folder as a github repository (assuming authentication is established already locally).
+- usethis::use_github_action("pkgdown"), this copies over a set of instructions for Github Action.
+- usethis::use_pkgdown_github_pages(), this creates the remote "gh-pages" branch and run Github Action first time. 
+
+Once these are set up, then in the future, [edit functions and vignette files](file:///G:/repos/PkgTestR/docs/articles/ffv_devtools_create_package.html), test functions locally, and build site locally with [pkgdown::build_site()](https://pkgdown.r-lib.org/reference/build_site.html) in a gitignored folder. Then any pushed commits to the remote repo will trigue running through the Github Actions again, and lead to an update of the website. 
+
+```{r, eval = FALSE}
+# locally building site
+pkgdown::build_site()
+```
 
 ### Initialize Git with usethis::use_git()
 
 First, initialize the project folder as a git folder with [usethis::use_git()](https://usethis.r-lib.org/reference/use_git.html), and then commit all existing non-gitignored files. See the *.gitignore* file for which documents are ignored. Having commited the changes, can use VSCode, Atom, various other editors to monitor and track changes and manage git operations. RStudio also provides in the top-right pane a git tab. 
+
+For additional information, see [here](https://github.com/FanWangEcon/Tex4Econ#9-gitpages-and-git) for how to set up git, github, github pages, etc, outside of the R environment. 
+
 
 ```{r, eval = FALSE}
 # Make sure we are in the "G:/repos/PkgTestR/" directory
@@ -108,15 +125,20 @@ usethis::use_github(private = FALSE)
 
 ### Set up Github Actions with usethis::use_github_actions()
 
-Third, setup Github Actions using [usethis::use_github_actions()](https://usethis.r-lib.org/reference/github_actions.html). This would automate a number of package building procedures, significantly improving package stability and also package ease for continuous development. 
+Third, setup Github Actions using [usethis::use_github_actions()](https://usethis.r-lib.org/reference/github_actions.html). The automates a number of package building procedures for building the project's public facing website. 
+
+The command below generates the file [.github/workflows/pkgdown.yaml](https://github.com/FanWangEcon/PkgTestR/blob/master/.github/workflows/pkgdown.yaml), which is copied over from [r-lib actions](https://github.com/r-lib/actions/blob/v2/examples/README.md#build-pkgdown-site). The instructions build site and deploy to Github pages, on the gh-pages branch of the github repo.
 
 ```{r, eval = FALSE}
-usethis::use_github_actions()
 usethis::use_github_action("pkgdown")
 
 # ✔ Saving 'r-lib/actions/examples/pkgdown.yaml@v2' to '.github/workflows/pkgdown.yaml'
 # • Learn more at <https://github.com/r-lib/actions/blob/v2/examples/README.md>.
 ```
+
+### Push and Create pkgdown website with usethis::use_pkgdown_github_pages()
+
+Running [usethis::use_pkgdown_github_pages()](https://usethis.r-lib.org/reference/use_pkgdown.html) will update population various files with proper url. And it will also create on the repo repository a branch "gh-pages", which will be used to publish the site. 
 
 ```{r, eval = FALSE}
 usethis::use_pkgdown_github_pages()
@@ -141,5 +163,3 @@ usethis::use_pkgdown_github_pages()
 # ✔ Adding 'https://fanwangecon.github.io/PkgTestR/' to URL field in DESCRIPTION
 # ✔ Setting 'https://fanwangecon.github.io/PkgTestR/' as homepage of GitHub repo 'FanWangEcon/PkgTestR'
 ```
-
-https://github.com/r-lib/actions/blob/v2/examples/README.md#build-pkgdown-site

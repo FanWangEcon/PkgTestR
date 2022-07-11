@@ -39,6 +39,27 @@ Additionally, we also use:
 - *devtools::build()*: build the binary *tar.gz* file.
 - *devtools::build_manual()*: building the PDF manual including function markups. 
 
+```{r, eval = FALSE}
+# write documentation files
+devtools::document()
+devtools::run_examples()
+devtools::build_vignettes()
+
+# check for errors
+devtools::check()
+
+# Install and load
+devtools::install()
+devtools::load_all()
+
+# build local binary and pdf manual
+devtools::build()
+devtools::build_manual()
+
+# locally building site
+pkgdown::build_site()
+```
+
 ## Initialize a Skeleton Package
 
 With [devtools](https://devtools.r-lib.org/), we create a new package.
