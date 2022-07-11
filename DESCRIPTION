@@ -11,5 +11,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Suggests: knitr, rmarkdown, devtools
 VignetteBuilder: knitr
-URL: https://github.com/FanWangEcon/PkgTestR
+URL: https://github.com/FanWangEcon/PkgTestR,
+    https://fanwangecon.github.io/PkgTestR/
 BugReports: https://github.com/FanWangEcon/PkgTestR/issues

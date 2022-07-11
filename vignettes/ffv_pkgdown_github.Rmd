@@ -20,21 +20,126 @@ library(PkgTestR)
 
 ## Set up Git and Github 
 
-Develope a package, that includes functions with ROxygen2 documentation and also vignette files. Then, use functions from *usethis** to automate various git and github related tasks.
+Develop a package, that includes functions with ROxygen2 documentation and also vignette files. Then, use functions from *usethis** to automate various git and github related tasks. See [here](https://github.com/FanWangEcon/Tex4Econ#9-gitpages-and-git) for how to set up git, github, github pages, etc, outside ofthe R environment. 
 
-First, initialize the project folder as a git folder, and then commit all existing non-gitignored files. See the *.gitignore* file for which documents are ignored. 
+### Initialize Git with usethis::use_git()
+
+First, initialize the project folder as a git folder with [usethis::use_git()](https://usethis.r-lib.org/reference/use_git.html), and then commit all existing non-gitignored files. See the *.gitignore* file for which documents are ignored. Having commited the changes, can use VSCode, Atom, various other editors to monitor and track changes and manage git operations. RStudio also provides in the top-right pane a git tab. 
 
 ```{r, eval = FALSE}
+# Make sure we are in the "G:/repos/PkgTestR/" directory
 usethis::use_git(message = "Initial commit")
+
+# ✔ Initialising Git repo
+# ✔ Adding '.Rhistory', '.Rdata', '.httr-oauth', '.DS_Store' to '.gitignore'
+# There are 10 uncommitted files:
+# * '.gitignore'
+# * '.Rbuildignore'
+# * '_pkgdown.yml'
+# * 'DESCRIPTION'
+# * 'LICENSE'
+# * 'man/'
+# * 'NAMESPACE'
+# * 'PkgTestR.Rproj'
+# * 'R/'
+# * 'vignettes/'
+# Is it ok to commit them?
+# 
+# 1: Absolutely not
+# 2: Yup
+# 3: No way
+# 
+# Selection: 2
+# ✔ Adding files
+# ✔ Making a commit with message 'Initial commit'
+# • A restart of RStudio is required to activate the Git pane
+# Restart now?
+# 
+# 1: No
+# 2: Yes
+# 3: Negative
+# 
+# Selection: 1
 ```
 
-nce per package:
-• use_git() — Activate git
-• use_github() — Connect to GitHub
-• use_github_actions() — Set up automated checks
+### Connect to Github using usethis::use_github()
 
-## Testing
+Second, connect to github using [usethis::use_github()](https://usethis.r-lib.org/reference/use_github.html). Calling this, after the repo is git-initialized, accomplishes the following: 
+
+1. Creates a remote repo on github (under the authenticated account) with the same name as the local project folder name
+2. Set up remote
+3. Update URL fields in R package 
+4. Commits and pushes local to remote 
+5. Open up remote repo site: [https://github.com/FanWangEcon/PkgTestR](https://github.com/FanWangEcon/PkgTestR)
+
+Prior to this, authentication has to be set up. This [Managing Git(Hub) Credentials](https://usethis.r-lib.org/articles/git-credentials.html). See some additional authentication details [here](https://fanwangecon.github.io/Tex4Econ/nontex/install/linux/fn_ubuntu.html).
+
+```{r, eval = FALSE}
+usethis::use_github(private = FALSE)
+
+# ℹ Defaulting to 'https' Git protocol
+# ✔ Setting active project to 'G:/repos/PkgTestR'
+# There are uncommitted changes and we're about to create and push to a new GitHub repo
+# Do you want to proceed anyway?
+# 
+# 1: Yeah
+# 2: No way
+# 3: Nope
+# 
+# Selection: Yeah
+# ✔ Creating GitHub repository 'FanWangEcon/PkgTestR'
+# ✔ Setting remote 'origin' to 'https://github.com/FanWangEcon/PkgTestR.git'
+# ✔ Setting URL field in DESCRIPTION to 'https://github.com/FanWangEcon/PkgTestR'
+# ✔ Setting BugReports field in DESCRIPTION to 'https://github.com/FanWangEcon/PkgTestR/issues'
+# There is 1 uncommitted file:
+# * 'DESCRIPTION'
+# Is it ok to commit it?
+# 
+# 1: Negative
+# 2: Definitely
+# 3: No way
+# 
+# Selection: 2
+# ✔ Adding files
+# ✔ Making a commit with message 'Add GitHub links to DESCRIPTION'
+# ✔ Pushing 'master' branch to GitHub and setting 'origin/master' as upstream branch
+# ✔ Opening URL 'https://github.com/FanWangEcon/PkgTestR'
+```
+
+### Set up Github Actions with usethis::use_github_actions()
+
+Third, setup Github Actions using [usethis::use_github_actions()](https://usethis.r-lib.org/reference/github_actions.html). This would automate a number of package building procedures, significantly improving package stability and also package ease for continuous development. 
+
+```{r, eval = FALSE}
+usethis::use_github_actions()
+usethis::use_github_action("pkgdown")
+
+# ✔ Saving 'r-lib/actions/examples/pkgdown.yaml@v2' to '.github/workflows/pkgdown.yaml'
+# • Learn more at <https://github.com/r-lib/actions/blob/v2/examples/README.md>.
+```
 
 ```{r, eval = FALSE}
 usethis::use_pkgdown_github_pages()
+
+# Overwrite pre-existing file '_pkgdown.yml'?
+# 
+# 1: Definitely
+# 2: Absolutely not
+# 3: Not now
+# 
+# Selection: 1
+# ✔ Writing '_pkgdown.yml'
+# • Modify '_pkgdown.yml'
+# ✔ Initializing empty, orphan 'gh-pages' branch in GitHub repo 'FanWangEcon/PkgTestR'
+# ✔ GitHub Pages is publishing from:
+# • URL: 'https://fanwangecon.github.io/PkgTestR/'
+# • Branch: 'gh-pages'
+# • Path: '/'
+# ✔ Saving 'r-lib/actions/examples/pkgdown.yaml@v2' to '.github/workflows/pkgdown.yaml'
+# • Learn more at <https://github.com/r-lib/actions/blob/v2/examples/README.md>.
+# ✔ Recording 'https://fanwangecon.github.io/PkgTestR/' as site's url in '_pkgdown.yml'
+# ✔ Adding 'https://fanwangecon.github.io/PkgTestR/' to URL field in DESCRIPTION
+# ✔ Setting 'https://fanwangecon.github.io/PkgTestR/' as homepage of GitHub repo 'FanWangEcon/PkgTestR'
 ```
+
+https://github.com/r-lib/actions/blob/v2/examples/README.md#build-pkgdown-site
