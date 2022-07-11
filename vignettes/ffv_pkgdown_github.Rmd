@@ -1,8 +1,8 @@
 ---
-title: "Generate Package Website with pkgdown and Github Pages"
+title: "R Package Site with pkgdown, Github Pages and Actions"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Generate Package Website with pkgdown and Github Pages}
+  %\VignetteIndexEntry{R Package Site with pkgdown, Github Pages and Actions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,7 +20,7 @@ library(PkgTestR)
 
 ## Set up Git, Github Repository, and Github Actions
 
-Develop a package, that includes functions with ROxygen2 documentation and also vignette files. Then, use functions from *usethis** to automate various git and github related tasks. 
+Develop a package, that includes functions with ROxygen2 documentation and also vignette files. Then, use functions from *usethis* to automate various git and github related tasks. 
 
 We will use below:
 
@@ -32,11 +32,20 @@ We will use below:
 Once these are set up, then in the future, [edit functions and vignette files](file:///G:/repos/PkgTestR/docs/articles/ffv_devtools_create_package.html), test functions locally, and build site locally with [pkgdown::build_site()](https://pkgdown.r-lib.org/reference/build_site.html) in a gitignored folder. Then any pushed commits to the remote repo will trigue running through the Github Actions again, and lead to an update of the website. 
 
 ```{r, eval = FALSE}
+# One time set-up with Git, Github, and Github Actions
+usethis::use_git(message = "Initial commit")
+usethis::use_github(private = FALSE)
+usethis::use_github_action("pkgdown")
+usethis::use_pkgdown_github_pages()
+
 # locally building site
 pkgdown::build_site()
+
+# Install package
+devtools::install_github("FanWangEcon/PkgTestR")
 ```
 
-### Initialize Git with usethis::use_git()
+### Initialize Git
 
 First, initialize the project folder as a git folder with [usethis::use_git()](https://usethis.r-lib.org/reference/use_git.html), and then commit all existing non-gitignored files. See the *.gitignore* file for which documents are ignored. Having commited the changes, can use VSCode, Atom, various other editors to monitor and track changes and manage git operations. RStudio also provides in the top-right pane a git tab. 
 
@@ -79,7 +88,7 @@ usethis::use_git(message = "Initial commit")
 # Selection: 1
 ```
 
-### Connect to Github using usethis::use_github()
+### Connect to Github
 
 Second, connect to github using [usethis::use_github()](https://usethis.r-lib.org/reference/use_github.html). Calling this, after the repo is git-initialized, accomplishes the following: 
 
@@ -123,7 +132,7 @@ usethis::use_github(private = FALSE)
 # ✔ Opening URL 'https://github.com/FanWangEcon/PkgTestR'
 ```
 
-### Set up Github Actions with usethis::use_github_actions()
+### Set up Github Actions
 
 Third, setup Github Actions using [usethis::use_github_actions()](https://usethis.r-lib.org/reference/github_actions.html). The automates a number of package building procedures for building the project's public facing website. 
 
@@ -136,7 +145,7 @@ usethis::use_github_action("pkgdown")
 # • Learn more at <https://github.com/r-lib/actions/blob/v2/examples/README.md>.
 ```
 
-### Push and Create pkgdown website with usethis::use_pkgdown_github_pages()
+### Push and Create pkgdown Website
 
 Running [usethis::use_pkgdown_github_pages()](https://usethis.r-lib.org/reference/use_pkgdown.html) will update population various files with proper url. And it will also create on the repo repository a branch "gh-pages", which will be used to publish the site. 
 
@@ -162,4 +171,28 @@ usethis::use_pkgdown_github_pages()
 # ✔ Recording 'https://fanwangecon.github.io/PkgTestR/' as site's url in '_pkgdown.yml'
 # ✔ Adding 'https://fanwangecon.github.io/PkgTestR/' to URL field in DESCRIPTION
 # ✔ Setting 'https://fanwangecon.github.io/PkgTestR/' as homepage of GitHub repo 'FanWangEcon/PkgTestR'
+```
+
+## Continuous Development 
+
+Once these are set up, then in the future, [edit functions and vignette files](file:///G:/repos/PkgTestR/docs/articles/ffv_devtools_create_package.html), test functions locally, and build site locally with [pkgdown::build_site()](https://pkgdown.r-lib.org/reference/build_site.html), whose outputs are stored in a gitignored folder and will not be pushed to the remote repo.
+
+We can also use [devtools::check](https://devtools.r-lib.org/reference/check.html) to make sure that various documentations etc are all proper. 
+
+After we have completed local testing, we can commit and push. Any pushed commits to the remote repo will trigue running through the Github Actions again, and lead to an update of the website. This allows for continuous package development. Note that if we are confident about the new code and instructions, we can commit and push without local testing, after running [devtools::document()](https://devtools.r-lib.org/reference/document.html), other the results generated from that function in the *man* folder are commited. Results from check and build_site do not change contents that would be pushed to remote. 
+
+```{r, eval = FALSE}
+# Update the .Rd files if .R files have been modified. 
+devtools::document()
+# locally building site
+pkgdown::build_site()
+```
+
+## Installing the Package. 
+
+Once the repository is on github, can use [devtools::install_github](https://devtools.r-lib.org/reference/remote-reexports.html) to install the latest version of the package locally. 
+
+```{r, eval = False}
+# remove.packages("PkgTestR")
+devtools::install_github("FanWangEcon/PkgTestR")
 ```

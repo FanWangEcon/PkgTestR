@@ -474,7 +474,7 @@ vignette("ffv_devtools_create_package", package="PkgTestR")
 
 ## pkgdown Build Site
 
-Use [pkgdown](https://pkgdown.r-lib.org/articles/pkgdown.html) to create a website to show the package.
+Use [pkgdown](https://pkgdown.r-lib.org/articles/pkgdown.html) to create a website to show the package. See the page [Generate Package Website with pkgdown and Github Pages](https://fanwangecon.github.io/PkgTestR/articles/ffv_pkgdown_github.html) for more information. 
 
 ```{r, eval = FALSE}
 # Run once to configure package to use pkgdown
