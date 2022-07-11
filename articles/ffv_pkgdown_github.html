@@ -81,14 +81,26 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/FanWangEcon/PkgTestR" class="external-link">PkgTestR</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="set-up-git-and-github">Set up Git and Github<a class="anchor" aria-label="anchor" href="#set-up-git-and-github"></a>
+<h2 id="set-up-git-github-repository-and-github-actions">Set up Git, Github Repository, and Github Actions<a class="anchor" aria-label="anchor" href="#set-up-git-github-repository-and-github-actions"></a>
 </h2>
-<p>Develop a package, that includes functions with ROxygen2 documentation and also vignette files. Then, use functions from *usethis** to automate various git and github related tasks. See <a href="https://github.com/FanWangEcon/Tex4Econ#9-gitpages-and-git" class="external-link">here</a> for how to set up git, github, github pages, etc, outside ofthe R environment.</p>
+<p>Develop a package, that includes functions with ROxygen2 documentation and also vignette files. Then, use functions from *usethis** to automate various git and github related tasks.</p>
+<p>We will use below:</p>
+<ul>
+<li>usethis::use_git(message = “Initial commit”), this makes the folder a git folder.</li>
+<li>usethis::use_github(private = FALSE), this creates the local folder as a github repository (assuming authentication is established already locally).</li>
+<li>usethis::use_github_action(“pkgdown”), this copies over a set of instructions for Github Action.</li>
+<li>usethis::use_pkgdown_github_pages(), this creates the remote “gh-pages” branch and run Github Action first time.</li>
+</ul>
+<p>Once these are set up, then in the future, <a href="file:///G:/repos/PkgTestR/docs/articles/ffv_devtools_create_package.html">edit functions and vignette files</a>, test functions locally, and build site locally with <a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a> in a gitignored folder. Then any pushed commits to the remote repo will trigue running through the Github Actions again, and lead to an update of the website.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># locally building site</span></span>
+<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="initialize-git-with-usethisuse_git">Initialize Git with usethis::use_git()<a class="anchor" aria-label="anchor" href="#initialize-git-with-usethisuse_git"></a>
 </h3>
 <p>First, initialize the project folder as a git folder with <a href="https://usethis.r-lib.org/reference/use_git.html" class="external-link">usethis::use_git()</a>, and then commit all existing non-gitignored files. See the <em>.gitignore</em> file for which documents are ignored. Having commited the changes, can use VSCode, Atom, various other editors to monitor and track changes and manage git operations. RStudio also provides in the top-right pane a git tab.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>For additional information, see <a href="https://github.com/FanWangEcon/Tex4Econ#9-gitpages-and-git" class="external-link">here</a> for how to set up git, github, github pages, etc, outside of the R environment.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Make sure we are in the "G:/repos/PkgTestR/" directory</span></span>
 <span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_git.html" class="external-link">use_git</a></span><span class="op">(</span>message <span class="op">=</span> <span class="st">"Initial commit"</span><span class="op">)</span></span>
 <span></span>
@@ -136,7 +148,7 @@
 </li>
 </ol>
 <p>Prior to this, authentication has to be set up. This <a href="https://usethis.r-lib.org/articles/git-credentials.html" class="external-link">Managing Git(Hub) Credentials</a>. See some additional authentication details <a href="https://fanwangecon.github.io/Tex4Econ/nontex/install/linux/fn_ubuntu.html" class="external-link">here</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_github.html" class="external-link">use_github</a></span><span class="op">(</span>private <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ℹ Defaulting to 'https' Git protocol</span></span>
@@ -170,14 +182,19 @@
 <div class="section level3">
 <h3 id="set-up-github-actions-with-usethisuse_github_actions">Set up Github Actions with usethis::use_github_actions()<a class="anchor" aria-label="anchor" href="#set-up-github-actions-with-usethisuse_github_actions"></a>
 </h3>
-<p>Third, setup Github Actions using <a href="https://usethis.r-lib.org/reference/github_actions.html" class="external-link">usethis::use_github_actions()</a>. This would automate a number of package building procedures, significantly improving package stability and also package ease for continuous development.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/github_actions.html" class="external-link">use_github_actions</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/github_actions.html" class="external-link">use_github_action</a></span><span class="op">(</span><span class="st">"pkgdown"</span><span class="op">)</span></span>
+<p>Third, setup Github Actions using <a href="https://usethis.r-lib.org/reference/github_actions.html" class="external-link">usethis::use_github_actions()</a>. The automates a number of package building procedures for building the project’s public facing website.</p>
+<p>The command below generates the file <a href="https://github.com/FanWangEcon/PkgTestR/blob/master/.github/workflows/pkgdown.yaml" class="external-link">.github/workflows/pkgdown.yaml</a>, which is copied over from <a href="https://github.com/r-lib/actions/blob/v2/examples/README.md#build-pkgdown-site" class="external-link">r-lib actions</a>. The instructions build site and deploy to Github pages, on the gh-pages branch of the github repo.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/github_actions.html" class="external-link">use_github_action</a></span><span class="op">(</span><span class="st">"pkgdown"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ✔ Saving 'r-lib/actions/examples/pkgdown.yaml@v2' to '.github/workflows/pkgdown.yaml'</span></span>
 <span><span class="co"># • Learn more at &lt;https://github.com/r-lib/actions/blob/v2/examples/README.md&gt;.</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+</div>
+<div class="section level3">
+<h3 id="push-and-create-pkgdown-website-with-usethisuse_pkgdown_github_pages">Push and Create pkgdown website with usethis::use_pkgdown_github_pages()<a class="anchor" aria-label="anchor" href="#push-and-create-pkgdown-website-with-usethisuse_pkgdown_github_pages"></a>
+</h3>
+<p>Running <a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">usethis::use_pkgdown_github_pages()</a> will update population various files with proper url. And it will also create on the repo repository a branch “gh-pages”, which will be used to publish the site.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">use_pkgdown_github_pages</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Overwrite pre-existing file '_pkgdown.yml'?</span></span>
@@ -199,7 +216,6 @@
 <span><span class="co"># ✔ Recording 'https://fanwangecon.github.io/PkgTestR/' as site's url in '_pkgdown.yml'</span></span>
 <span><span class="co"># ✔ Adding 'https://fanwangecon.github.io/PkgTestR/' to URL field in DESCRIPTION</span></span>
 <span><span class="co"># ✔ Setting 'https://fanwangecon.github.io/PkgTestR/' as homepage of GitHub repo 'FanWangEcon/PkgTestR'</span></span></code></pre></div>
-<p><a href="https://github.com/r-lib/actions/blob/v2/examples/README.md#build-pkgdown-site" class="external-link uri">https://github.com/r-lib/actions/blob/v2/examples/README.md#build-pkgdown-site</a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
