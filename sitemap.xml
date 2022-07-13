@@ -10,6 +10,9 @@
     <loc>https://fanwangecon.github.io/PkgTestR/articles/ffv_devtools_create_package.html</loc>
   </url>
   <url>
+    <loc>https://fanwangecon.github.io/PkgTestR/articles/ffv_gen_data_rda.html</loc>
+  </url>
+  <url>
     <loc>https://fanwangecon.github.io/PkgTestR/articles/ffv_pkgdown_github.html</loc>
   </url>
   <url>
@@ -29,5 +32,8 @@
   </url>
   <url>
     <loc>https://fanwangecon.github.io/PkgTestR/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://fanwangecon.github.io/PkgTestR/reference/simu_income_v5n9.html</loc>
   </url>
 </urlset>

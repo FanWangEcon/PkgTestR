@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">PkgTestR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +42,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/ffv_devtools_create_package.html">Using devtools to Create a R Package</a>
+    <a class="dropdown-item" href="../articles/ffv_gen_data_rda.html">Generate and document R data files</a>
     <a class="dropdown-item" href="../articles/ffv_pkgdown_github.html">R Package Site with pkgdown, Github Pages and Actions</a>
   </div>
 </li>
@@ -115,8 +116,22 @@
 <li>
 <em>devtools::build_manual()</em>: building the PDF manual including function markups.</li>
 </ul>
+<p>Limited set of commands to run during development:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># write documentation files</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ls.html" class="external-link">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="st">"G:/repos/PkgTestR"</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/run_examples.html" class="external-link">run_examples</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Full set of commands to run:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Clean and set directory</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span>list<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ls.html" class="external-link">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="st">"G:/repos/PkgTestR"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># write documentation files</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/run_examples.html" class="external-link">run_examples</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/build_vignettes.html" class="external-link">build_vignettes</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -149,7 +164,7 @@
 <li>Creates the R folder.</li>
 <li>The second optional parameter <em>open</em> will start a new session in RStudio desktop with the package opened. When opened, bottom right panel will be set to the project directory. On the left, in the console panel, top bar status should have the project directory as well. Note that a hidden folder <em>.Rproj.user</em>, which is ignored in the <em>.gitignore</em> file, might begin populating with temporary contents when working in RStudio with the project.</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/create.html" class="external-link">create</a></span><span class="op">(</span><span class="st">"G:/repos/PkgTestR"</span>, open<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ✔ Creating 'G:/repos/PkgTestR/'</span></span>
@@ -175,24 +190,24 @@
 <span><span class="co"># ✔ Opening 'G:/repos/PkgTestR/' in new RStudio session</span></span>
 <span><span class="co"># ✔ Setting active project to '&lt;no active project&gt;'</span></span></code></pre></div>
 <p>Second, go the the just created DESCRIPTION (e.g., “G:/repos/PkgTestR/DESCRIPTION”) file, and modify Title and author information.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Package:</span> PkgTestR</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Title:</span> Testing the Creation of a R Package</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Version:</span> 0.0.0.9000</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Authors@R:</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">person</span><span class="er">(</span><span class="st">"Fan"</span><span class="ex">,</span> <span class="st">"Wang"</span>, , <span class="st">"fanwecon@gmail.com"</span>, role = c<span class="er">(</span><span class="st">"aut"</span><span class="ex">,</span> <span class="st">"cre"</span><span class="kw">)</span><span class="ex">,</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>           <span class="ex">comment</span> = c<span class="er">(</span><span class="ex">ORCID</span> = <span class="st">"0000-0003-2640-5420"</span><span class="kw">))</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Description:</span> Creating a R package and a website with pkgdown</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">License:</span> MIT + file LICENSE</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Encoding:</span> UTF-8</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Roxygen:</span> list<span class="er">(</span><span class="ex">markdown</span> = TRUE<span class="kw">)</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="ex">RoxygenNote:</span> 7.2.0</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Package:</span> PkgTestR</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Title:</span> Testing the Creation of a R Package</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Version:</span> 0.0.0.9000</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">Authors@R:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">person</span><span class="er">(</span><span class="st">"Fan"</span><span class="ex">,</span> <span class="st">"Wang"</span>, , <span class="st">"fanwecon@gmail.com"</span>, role = c<span class="er">(</span><span class="st">"aut"</span><span class="ex">,</span> <span class="st">"cre"</span><span class="kw">)</span><span class="ex">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>           <span class="ex">comment</span> = c<span class="er">(</span><span class="ex">ORCID</span> = <span class="st">"0000-0003-2640-5420"</span><span class="kw">))</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">Description:</span> Creating a R package and a website with pkgdown</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="ex">License:</span> MIT + file LICENSE</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="ex">Encoding:</span> UTF-8</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ex">Roxygen:</span> list<span class="er">(</span><span class="ex">markdown</span> = TRUE<span class="kw">)</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ex">RoxygenNote:</span> 7.2.0</span></code></pre></div>
 <p>Third, create a LICENSE file with for example <a href="https://en.wikipedia.org/wiki/MIT_License" class="external-link">MIT License</a> in the root directory just created (e.g., <a href="https://github.com/FanWangEcon/Tex4Econ/blob/master/nontex/rprjtemplate/LICENSE" class="external-link">LICENSE</a>)</p>
 </div>
 <div class="section level2">
 <h2 id="write-a-function">Write a Function<a class="anchor" aria-label="anchor" href="#write-a-function"></a>
 </h2>
 <p>Now, we write a function with markups, to be stored in a file in the <em>/R</em> directory under root. Below, we have a slightly modified function from a <a href="https://cran.r-project.org/web/packages/roxygen2/vignettes/roxygen2.html" class="external-link">roxygen2</a> vignette. This function is in <a href="https://github.com/FanWangEcon/PkgTestR/blob/master/R/ff_rtest_add.R" class="external-link">R/ff_rtest_add.R</a></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#' Add together two numbers</span></span>
 <span><span class="co">#'</span></span>
 <span><span class="co">#' @description This function provides an example with Roxygen2 markups.</span></span>
@@ -218,7 +233,7 @@
 <h2 id="document-check-and-install-package">Document, Check, and Install Package<a class="anchor" aria-label="anchor" href="#document-check-and-install-package"></a>
 </h2>
 <p>In the steps below, we will run the functions from devtools shown below to create and install a package with several functions and vignettes.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># First</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span>pkg<span class="op">=</span><span class="st">"G:/repos/PkgTestR"</span><span class="op">)</span></span>
 <span><span class="co"># Second</span></span>
@@ -234,7 +249,7 @@
 </h3>
 <p>We will create documentations and install the package using <a href="https://devtools.r-lib.org/" class="external-link">devtools</a>.</p>
 <p>First, we will document the function that we have created, using <a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a>. This updates <em>NAMESPACE</em> for functions that have <em><span class="citation">@export</span></em>, and also generate R documention files in the <em>man</em> folder.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span>pkg<span class="op">=</span><span class="st">"G:/repos/PkgTestR"</span><span class="op">)</span></span></code></pre></div>
 <p>The function we have created, <em>ff_rtest_add_basic()</em>, now has a R documentation file, <a href="https://github.com/FanWangEcon/PkgTestR/blob/master/man/ff_rtest_add_basic.Rd" class="external-link">man/ff_rtest_add_basic.Rd</a>. The file is automatically generated by roxygen2, and looks like this:</p>
 <pre class="rd"><code>% Generated by roxygen2: do not edit by hand
@@ -279,7 +294,7 @@ Fan Wang, \url{http://fanwangecon.github.io}
 <h4 id="devtoolsrun_examples">devtools::run_examples()<a class="anchor" aria-label="anchor" href="#devtoolsrun_examples"></a>
 </h4>
 <p>We test the examples for the functions <a href="https://devtools.r-lib.org/reference/run_examples.html" class="external-link">devtools::run_examples</a>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/run_examples.html" class="external-link">run_examples</a></span><span class="op">(</span>pkg<span class="op">=</span><span class="st">"G:/repos/PkgTestR"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ℹ Updating PkgTestR documentation</span></span>
@@ -304,7 +319,7 @@ Fan Wang, \url{http://fanwangecon.github.io}
 <h4 id="devtoolsbuild_vignettes">devtools::build_vignettes()<a class="anchor" aria-label="anchor" href="#devtoolsbuild_vignettes"></a>
 </h4>
 <p>We write a vignette file, following the instructions on <a href="https://kbroman.org/pkg_primer/pages/vignettes.html" class="external-link">this page</a>. In fact, this <a href="https://github.com/FanWangEcon/PkgTestR/blob/master/vignettes/ffv_devtools_create_package.Rmd" class="external-link">present page (vignettes/ffv_devtools_create_package.Rmd)</a> is the vignette page. We can automatically create a vignette using <a href="https://usethis.r-lib.org/reference/use_vignette.html" class="external-link">usethis::use_vignette</a>. This will make some automated updates to DESCRIPTION and make other appropriate changes.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_vignette.html" class="external-link">use_vignette</a></span><span class="op">(</span><span class="st">"ffv_pkgdown_github"</span>, title <span class="op">=</span> <span class="st">"Generate Package Website with pkgdown and Github Pages"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># &gt; usethis::use_vignette("ffv_pkgdown_github", title = "Generate Package Website with pkgdown and Github Pages")</span></span>
@@ -314,19 +329,19 @@ Fan Wang, \url{http://fanwangecon.github.io}
 <span><span class="co"># ✔ Writing 'vignettes/ffv_pkgdown_github.Rmd'</span></span>
 <span><span class="co"># • Modify 'vignettes/ffv_pkgdown_github.Rmd'</span></span></code></pre></div>
 <p>Note that, front matter at the top of an otherwise standard markdown file makes this a vignette file:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Put the title of your vignette here"</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="an">output:</span><span class="co"> rmarkdown::html_vignette</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="an">vignette:</span><span class="co"> &gt;</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">  %\VignetteIndexEntry{Put the title of your vignette here}</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">  %\VignetteEngine{knitr::rmarkdown}</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">  \usepackage[utf8]{inputenc}</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode md"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Put the title of your vignette here"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="an">output:</span><span class="co"> rmarkdown::html_vignette</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="an">vignette:</span><span class="co"> &gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">  %\VignetteIndexEntry{Put the title of your vignette here}</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">  %\VignetteEngine{knitr::rmarkdown}</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">  \usepackage[utf8]{inputenc}</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span></code></pre></div>
 <p>Also note, need to add <em>VignetteBuilder</em> to the DESCRIPTION file under root:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Suggests:</span> knitr, rmarkdown</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="ex">VignetteBuilder:</span> knitr</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Suggests:</span> knitr, rmarkdown</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">VignetteBuilder:</span> knitr</span></code></pre></div>
 <p>We use the <a href="https://devtools.r-lib.org/reference/build_vignettes.html" class="external-link">devtools::build_vignette</a> function, which will generate a <em>doc</em> folder if that does not exist, and will store the HTML/R/RMD versions of the vignette file, with the same name, there. Note that this is different from where pkgdown will generate vignette files, which are to be a part of the project website.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/build_vignettes.html" class="external-link">build_vignettes</a></span><span class="op">(</span>pkg<span class="op">=</span><span class="st">"G:/repos/PkgTestR"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ℹ Building PkgTestR vignettes</span></span>
@@ -339,7 +354,7 @@ Fan Wang, \url{http://fanwangecon.github.io}
 <h3 id="devtoolscheck">devtools::check()<a class="anchor" aria-label="anchor" href="#devtoolscheck"></a>
 </h3>
 <p>Third, we update the documentation, build and load the package, and check the package locally with <a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check</a>. This can be very slow, but it will show errors, warnings, and notes. All errors and warnings have to be resolved before the package can be released to CRAN. Note that <em>check()</em> also updates the documentation .Rd files based on the functions and Roxygen2 markups in the R folder.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span>pkg<span class="op">=</span><span class="st">"G:/repos/PkgTestR"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ℹ Updating PkgTestR documentation</span></span>
@@ -428,7 +443,7 @@ Fan Wang, \url{http://fanwangecon.github.io}
 <h3 id="devtoolsinstall">devtools::install()<a class="anchor" aria-label="anchor" href="#devtoolsinstall"></a>
 </h3>
 <p>Using <a href="https://devtools.r-lib.org/reference/install.html" class="external-link">devtools::install</a>, install the package locally.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># devtools::build(pkg="G:/repos/PkgTestR", path="G:/repos/", manual=TRUE)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install.html" class="external-link">install</a></span><span class="op">(</span>pkg<span class="op">=</span><span class="st">"G:/repos/PkgTestR"</span>, build<span class="op">=</span><span class="cn">TRUE</span>, force<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -460,27 +475,27 @@ Fan Wang, \url{http://fanwangecon.github.io}
 </h2>
 <p>To share the package, we build a <em>.tar.gz</em> file, which is by default, if path is not specified, stored in the parent folder of the current package. We also create a manual for using the functions’ Roxygen2 markups.</p>
 <p>First, building the binary.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Update/build the binary</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/build.html" class="external-link">build</a></span><span class="op">(</span>pkg<span class="op">=</span><span class="st">"G:/repos/PkgTestR"</span>, path<span class="op">=</span><span class="st">"G:/repos/"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ✔  checking for file 'G:\repos\PkgTestR/DESCRIPTION'</span></span>
 <span><span class="co"># ─  preparing 'PkgTestR':</span></span>
-<span><span class="co"># ✔  checking DESCRIPTION meta-information ... </span></span>
+<span><span class="co"># ✔  checking DESCRIPTION meta-information ...</span></span>
 <span><span class="co"># ─  installing the package to build vignettes</span></span>
 <span><span class="co"># ✔  creating vignettes (4.8s)</span></span>
 <span><span class="co"># ─  checking for LF line-endings in source and make files and shell scripts</span></span>
 <span><span class="co"># ─  checking for empty or unneeded directories</span></span>
 <span><span class="co"># ─  building 'PkgTestR_0.0.0.9000.tar.gz'</span></span>
-<span><span class="co">#    </span></span>
+<span><span class="co">#</span></span>
 <span><span class="co"># [1] "G:/repos//PkgTestR_0.0.0.9000.tar.gz"</span></span></code></pre></div>
 <p>Second, creating the PDF Manual. This combines .Rd files together and comverts to PDF.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create PDF</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/build_manual.html" class="external-link">build_manual</a></span><span class="op">(</span>pkg<span class="op">=</span><span class="st">"G:/repos/PkgTestR"</span>, path<span class="op">=</span><span class="st">"G:/repos/"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Hmm ... looks like a package</span></span>
-<span><span class="co"># Converting Rd files to LaTeX </span></span>
+<span><span class="co"># Converting Rd files to LaTeX</span></span>
 <span><span class="co"># Creating pdf output from LaTeX ...</span></span>
 <span><span class="co"># This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex)</span></span>
 <span><span class="co">#  restricted \write18 enabled.</span></span>
@@ -496,7 +511,7 @@ Fan Wang, \url{http://fanwangecon.github.io}
 </h2>
 <p>After we have developed a function, with proper documentation/markup, and also vignette, we can now install the function, load it in memory, and start using the function.</p>
 <p>When working with development code, conveninent to use the <a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">devtools::load_all</a> function, which will take source code, and put it in memory.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load all code to memory</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span>path<span class="op">=</span><span class="st">"G:/repos/PkgTestR"</span><span class="op">)</span></span>
 <span></span>
@@ -517,7 +532,7 @@ Fan Wang, \url{http://fanwangecon.github.io}
 <h2 id="pkgdown-build-site">pkgdown Build Site<a class="anchor" aria-label="anchor" href="#pkgdown-build-site"></a>
 </h2>
 <p>Use <a href="https://pkgdown.r-lib.org/articles/pkgdown.html" class="external-link">pkgdown</a> to create a website to show the package. See the page <a href="https://fanwangecon.github.io/PkgTestR/articles/ffv_pkgdown_github.html">Generate Package Website with pkgdown and Github Pages</a> for more information.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run once to configure package to use pkgdown</span></span>
 <span><span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/use_pkgdown.html" class="external-link">use_pkgdown</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># Run to build the website</span></span>
@@ -527,12 +542,17 @@ Fan Wang, \url{http://fanwangecon.github.io}
 <h2 id="errors">Errors<a class="anchor" aria-label="anchor" href="#errors"></a>
 </h2>
 <div class="section level3">
+<h3 id="could-not-find-function">Could not find function<a class="anchor" aria-label="anchor" href="#could-not-find-function"></a>
+</h3>
+<p>After writing a function, while running <em>devtools::run_examples()</em>, get the error message “could not find function”function_name”“. This is likely because the function was not exported, can be <a href="https://github.com/FanWangEcon/PkgTestR/blob/02a14365edd621d401bcaa71a95e4d8686559e3a/R/ff_rtest_add.R#L9" class="external-link">exported like this</a>, which would add the function to <a href="https://github.com/FanWangEcon/PkgTestR/blob/master/NAMESPACE" class="external-link">NAMESPACE</a></p>
+</div>
+<div class="section level3">
 <h3 id="errors-during-check">Errors During Check<a class="anchor" aria-label="anchor" href="#errors-during-check"></a>
 </h3>
 <p>At the end of check, if the following message appears, that means we need to include <em>devtools</em> as the suggest field of DESCRIPTION. See <a href="https://github.com/Bioconductor/BiocWorkshops2019/issues/32#issue-454624956" class="external-link">here</a>.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">checking</span> for unstated dependencies in vignettes ... NOTE</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'::'</span> or <span class="st">':::'</span> import not declared from: <span class="st">'devtools'</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'library'</span> or <span class="st">'require'</span> call not declared from: <span class="st">'devtools'</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">checking</span> for unstated dependencies in vignettes ... NOTE</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'::'</span> or <span class="st">':::'</span> import not declared from: <span class="st">'devtools'</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">'library'</span> or <span class="st">'require'</span> call not declared from: <span class="st">'devtools'</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
