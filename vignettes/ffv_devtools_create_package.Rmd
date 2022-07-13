@@ -28,7 +28,7 @@ We will be using the following functions from [devtools](https://devtools.r-lib.
 - *devtools::create()*: create a package folder structure.
 - *devtools::document()*: generate .rd files in man and update NAMESPACE.
 + Examples and Vignettes:
-	- *devtools::run_examples()* to test examples from .R files, 
+	- *devtools::run_examples()* to test examples from .R files,
 	- *devtools::build_vignettes()* to create HTML etc for vignette files.
 - *devtools::check()*: builds and check package locally.
 - *devtools::install()*: building a package source directory into a single bundled file.
@@ -37,9 +37,27 @@ We will be using the following functions from [devtools](https://devtools.r-lib.
 Additionally, we also use:
 
 - *devtools::build()*: build the binary *tar.gz* file.
-- *devtools::build_manual()*: building the PDF manual including function markups. 
+- *devtools::build_manual()*: building the PDF manual including function markups.
+
+Limited set of commands to run during development:
 
 ```{r, eval = FALSE}
+rm(list=ls())
+setwd("G:/repos/PkgTestR")
+devtools::document()
+devtools::run_examples()
+devtools::install()
+devtools::load_all()
+pkgdown::build_site()
+```
+
+Full set of commands to run:
+
+```{r, eval = FALSE}
+# Clean and set directory
+rm(list=ls())
+setwd("G:/repos/PkgTestR")
+
 # write documentation files
 devtools::document()
 devtools::run_examples()
@@ -145,7 +163,7 @@ ff_rtest_add_basic <- function(ar_fl_x, ar_fl_y) {
 
 ## Document, Check, and Install Package
 
-In the steps below, we will run the functions from devtools shown below to create and install a package with several functions and vignettes. 
+In the steps below, we will run the functions from devtools shown below to create and install a package with several functions and vignettes.
 
 ```{r, eval = FALSE}
 # First
@@ -241,7 +259,7 @@ devtools::run_examples(pkg="G:/repos/PkgTestR")
 
 #### devtools::build_vignettes()
 
-We write a vignette file, following the instructions on [this page](https://kbroman.org/pkg_primer/pages/vignettes.html). In fact, this [present page (vignettes/ffv_devtools_create_package.Rmd)](https://github.com/FanWangEcon/PkgTestR/blob/master/vignettes/ffv_devtools_create_package.Rmd) is the vignette page. We can automatically create a vignette using [usethis::use_vignette](https://usethis.r-lib.org/reference/use_vignette.html). This will make some automated updates to DESCRIPTION and make other appropriate changes. 
+We write a vignette file, following the instructions on [this page](https://kbroman.org/pkg_primer/pages/vignettes.html). In fact, this [present page (vignettes/ffv_devtools_create_package.Rmd)](https://github.com/FanWangEcon/PkgTestR/blob/master/vignettes/ffv_devtools_create_package.Rmd) is the vignette page. We can automatically create a vignette using [usethis::use_vignette](https://usethis.r-lib.org/reference/use_vignette.html). This will make some automated updates to DESCRIPTION and make other appropriate changes.
 
 ```{r, eval = FALSE}
 usethis::use_vignette("ffv_pkgdown_github", title = "Generate Package Website with pkgdown and Github Pages")
@@ -407,9 +425,9 @@ devtools::install(pkg="G:/repos/PkgTestR", build=TRUE, force=TRUE)
 # * DONE (PkgTestR)
 ```
 
-## Build Binary and Manual 
+## Build Binary and Manual
 
-To share the package, we build a *.tar.gz* file, which is by default, if path is not specified, stored in the parent folder of the current package. We also create a manual for using the functions' Roxygen2 markups. 
+To share the package, we build a *.tar.gz* file, which is by default, if path is not specified, stored in the parent folder of the current package. We also create a manual for using the functions' Roxygen2 markups.
 
 First, building the binary.
 
@@ -419,13 +437,13 @@ devtools::build(pkg="G:/repos/PkgTestR", path="G:/repos/")
 
 # ✔  checking for file 'G:\repos\PkgTestR/DESCRIPTION'
 # ─  preparing 'PkgTestR':
-# ✔  checking DESCRIPTION meta-information ... 
+# ✔  checking DESCRIPTION meta-information ...
 # ─  installing the package to build vignettes
 # ✔  creating vignettes (4.8s)
 # ─  checking for LF line-endings in source and make files and shell scripts
 # ─  checking for empty or unneeded directories
 # ─  building 'PkgTestR_0.0.0.9000.tar.gz'
-#    
+#
 # [1] "G:/repos//PkgTestR_0.0.0.9000.tar.gz"
 ```
 
@@ -436,7 +454,7 @@ Second, creating the PDF Manual. This combines .Rd files together and comverts t
 devtools::build_manual(pkg="G:/repos/PkgTestR", path="G:/repos/")
 
 # Hmm ... looks like a package
-# Converting Rd files to LaTeX 
+# Converting Rd files to LaTeX
 # Creating pdf output from LaTeX ...
 # This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex)
 #  restricted \write18 enabled.
@@ -450,9 +468,9 @@ devtools::build_manual(pkg="G:/repos/PkgTestR", path="G:/repos/")
 
 ## Using an Installed Package
 
-After we have developed a function, with proper documentation/markup, and also vignette, we can now install the function, load it in memory, and start using the function. 
+After we have developed a function, with proper documentation/markup, and also vignette, we can now install the function, load it in memory, and start using the function.
 
-When working with development code, conveninent to use the [devtools::load_all](https://devtools.r-lib.org/reference/load_all.html) function, which will take source code, and put it in memory. 
+When working with development code, conveninent to use the [devtools::load_all](https://devtools.r-lib.org/reference/load_all.html) function, which will take source code, and put it in memory.
 
 ```{r, eval = FALSE}
 # Load all code to memory
@@ -474,7 +492,7 @@ vignette("ffv_devtools_create_package", package="PkgTestR")
 
 ## pkgdown Build Site
 
-Use [pkgdown](https://pkgdown.r-lib.org/articles/pkgdown.html) to create a website to show the package. See the page [Generate Package Website with pkgdown and Github Pages](https://fanwangecon.github.io/PkgTestR/articles/ffv_pkgdown_github.html) for more information. 
+Use [pkgdown](https://pkgdown.r-lib.org/articles/pkgdown.html) to create a website to show the package. See the page [Generate Package Website with pkgdown and Github Pages](https://fanwangecon.github.io/PkgTestR/articles/ffv_pkgdown_github.html) for more information.
 
 ```{r, eval = FALSE}
 # Run once to configure package to use pkgdown
@@ -483,9 +501,13 @@ usethis::use_pkgdown()
 pkgdown::build_site()
 ```
 
-## Errors 
+## Errors
 
-### Errors During Check 
+### Could not find function
+
+After writing a function, while running *devtools::run_examples()*, get the error message "could not find function "function_name"". This is likely because the function was not exported, can be [exported like this](https://github.com/FanWangEcon/PkgTestR/blob/02a14365edd621d401bcaa71a95e4d8686559e3a/R/ff_rtest_add.R#L9), which would add the function to [NAMESPACE](https://github.com/FanWangEcon/PkgTestR/blob/master/NAMESPACE)
+
+### Errors During Check
 
 At the end of check, if the following message appears, that means we need to include *devtools* as the suggest field of DESCRIPTION. See [here](https://github.com/Bioconductor/BiocWorkshops2019/issues/32#issue-454624956).
 
@@ -494,4 +516,3 @@ checking for unstated dependencies in vignettes ... NOTE
   '::' or ':::' import not declared from: 'devtools'
   'library' or 'require' call not declared from: 'devtools'
 ```
-

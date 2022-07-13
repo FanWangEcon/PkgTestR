@@ -12,11 +12,12 @@ ff_rtest_mul_basic(ar_fl_x, ar_fl_y)
 \item{ar_fl_y}{Scalar or vector of numbers, same length as \code{ar_fl_x}}
 }
 \value{
-The sum of \code{ar_fl_x} and \code{ar_fl_y}
+The product of \code{ar_fl_x} and \code{ar_fl_y} inline equation \eqn{x \cdot y}.
 }
 \description{
 This function provides an example with Roxygen2 markups.
-We can internally reference the sister function \code{\link[=ff_rtest_add_basic]{ff_rtest_add_basic()}}.
+We can internally reference the sister function \code{\link[=ff_rtest_add_basic]{ff_rtest_add_basic()}}. Display
+equation is shown with \deqn{x \cdot y}
 }
 \examples{
 ff_rtest_mul_basic(1, 1)

@@ -1,6 +1,6 @@
 Package: PkgTestR
-Title: Testing the Creation of a R Package
-Version: 0.0.0.9000
+Title: R Package Building Tutorial
+Version: 0.0.1
 Authors@R:
     person("Fan", "Wang", , "fanwecon@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2640-5420"))
@@ -14,3 +14,6 @@ VignetteBuilder: knitr
 URL: https://github.com/FanWangEcon/PkgTestR,
     https://fanwangecon.github.io/PkgTestR/
 BugReports: https://github.com/FanWangEcon/PkgTestR/issues
+Depends:
+    R (>= 2.10)
+LazyData: true

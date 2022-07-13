@@ -1,0 +1,165 @@
+---
+title: "Generate and document R data files"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Generate and document R data files}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(PkgTestR)
+```
+
+This file was created by running the commands below.
+
+```{r, eval = FALSE}
+setwd("G:/repos/PkgTestR")
+usethis::use_vignette("ffv_gen_data_rda", title = "Generate a R data file")
+```
+
+See the guide from [R Packages (2e), Chapter 8](https://r-pkgs.org/data.html). See Hadley's [babynames.rda generation file](https://github.com/hadley/babynames/blob/master/data-raw/applicants.R).
+
+## Create a data-raw folder
+
+Following [Hadley advice](https://r-pkgs.org/data.html):
+
+> Often, the data you include in data/ is a cleaned up version of raw data you've gathered from elsewhere. I highly recommend taking the time to include the code used to do this in the source version of your package. This will make it easy for you to update or reproduce your version of the data. I suggest that you put this code in data-raw/.
+
+To set-up the *data-raw/* folder, we will run the routine *use_data_raw()*. Note that this is NOT added to gitignore, so the contents will store to git repo. See example data-raw folder from Hadley: [babynames](https://github.com/hadley/babynames/tree/master/data-raw).
+
+```{r, eval = FALSE}
+usethis::use_data_raw(name = "DATASET")
+
+# ✔ Creating 'data-raw/'
+# ✔ Adding '^data-raw$' to '.Rbuildignore'
+# ✔ Writing 'data-raw/DATASET.R'
+# • Modify 'data-raw/DATASET.R'
+# • Finish the data preparation script in 'data-raw/DATASET.R'
+# • Use `usethis::use_data()` to add prepared data to package
+```
+
+And inside the *data-raw/DATASET.R* file, we have a line of code that uses *use_data* to properly store rda files.
+
+```{r, eval = FALSE}
+## code to prepare `DATASET` dataset goes here
+
+usethis::use_data(DATASET, overwrite = TRUE)
+```
+
+## Write a DATASET.R function
+
+In the [data-raw](https://github.com/FanWangEcon/PkgTestR/tree/master/data-raw) folder, we develop a script that will generate a simulated dataset. Using the R code from [R Do Anything Function over Dataframe Rows Expansion, (Mx1 by N) to (MxQ by N+1)](https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html), we will create a dataset with five variables.
+
+We will run the following script, [data-raw/simu_income_v5n9.R](https://github.com/FanWangEcon/PkgTestR/blob/master/data-raw/simu_income_v5n9.R), which generates the
+readable [data-raw/simu_income_v5n9.csv](https://github.com/FanWangEcon/PkgTestR/blob/master/data-raw/simu_income_v5n9.csv) and the binary [simu_income_v5n9.rda](https://github.com/FanWangEcon/PkgTestR/blob/master/data/simu_income_v5n9.rda) files. This is a simulated dataset with five variable and nine observations. Here is the generated CSV file
+
+```{r, eval = FALSE}
+# can initialize the file with this:
+# usethis::use_data_raw(name = "simu_income_v5n9")
+
+# Load library
+library(tibble)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(usethis)
+
+# Code below is from:
+# https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html
+# https://github.com/FanWangEcon//R4Econ/blob/master/function/dof//htmlpdfr/fs_funceval_expand.R
+
+# Parameter Setups
+it_M <- 3
+it_Q_max <- 5
+fl_rnorm_mu <- 1000
+ar_rnorm_sd <- seq(0.01, 200, length.out = it_M)
+set.seed(123)
+ar_it_q <- sample.int(it_Q_max, it_M, replace = TRUE)
+
+# N by Q varying parameters
+mt_data <- cbind(ar_it_q, ar_rnorm_sd)
+tb_M <- as_tibble(mt_data) %>%
+  rowid_to_column(var = "ID") %>%
+  rename(sd = ar_rnorm_sd, Q = ar_it_q) %>%
+  mutate(mean = fl_rnorm_mu)
+
+# normal draw expansion dot dollar
+# Generate $Q_m$ individual specific incomes, expanded different
+# number of times for each m
+tb_income <- tb_M %>%
+  group_by(ID) %>%
+  do(income = rnorm(.$Q, mean = .$mean, sd = .$sd)) %>%
+  unnest(c(income))
+
+# Merge back with tb_M
+tb_income_full_dd <- tb_income %>% left_join(tb_M)
+
+# Final name
+simu_income_v5n9 <- tb_income_full_dd
+
+# Write to CSV and write to rda
+write_csv(simu_income_v5n9, "data-raw/simu_income_v5n9.csv")
+# this saves in the data folder
+usethis::use_data(simu_income_v5n9, overwrite = TRUE)
+```
+
+Running the code above, we get the following outputs:
+
+```{r, eval = FALSE}
+#  Adding 'R' to Depends field in DESCRIPTION
+# ✔ Creating 'data/'
+# ✔ Setting LazyData to 'true' in 'DESCRIPTION'
+# ✔ Saving 'simu_income_v5n9' to 'data/simu_income_v5n9.rda'
+# • Document your data (see 'https://r-pkgs.org/data.html')
+```
+
+## Document dta files
+
+In the R folder, create a single file [data.R](https://github.com/FanWangEcon/PkgTestR/blob/master/R/data.R), that will document datasets included in the [data/](https://github.com/FanWangEcon/PkgTestR/tree/master/data) folder.
+
+```{R, eval = FALSE}
+#' Simulated unbalanced income panel
+#'
+#' Generate a panel with M individuals, each individual is observed
+#' for different spans of times. Before expanding, generate individual
+#' specific normal distribution standard deviation. All individuals
+#' share the same mean, but have increasing standard deviations.
+#'
+#'
+#' @format A data frame with 9 rows and 5 variables:
+#' \describe{
+#'   \item{ID}{Individual ID}
+#'   \item{income}{Simulated income}
+#'   \item{Q}{Number of observed periods for each individual}
+#'   \item{sd}{Individual-specific income standard deviation}
+#'   \item{mean}{Individual-specific income mean}
+#' }
+#' @source \href{R Do Anything Function over Dataframe Rows Expansion, (Mx1 by N) to (MxQ by N+1)}{https://fanwangecon.github.io/R4Econ/function/dof/htmlpdfr/fs_funceval_expand.html}
+#' @examples
+#' data(simu_income_v5n9)
+"simu_income_v5n9"
+```
+
+Above, we document variable names in the @format tag. Initially, put in "sd" twice, and did not put in "mean". Upon running [devtools::check()](https://devtools.r-lib.org/reference/check.html), received the following warning which indicates that the documentation is checked against actual dataset, using [codoc](https://rdrr.io/r/tools/codoc.html).
+
+```{bash, eval = FALSE}
+W  checking for code/documentation mismatches (576ms)
+   Data codoc mismatches from documentation object 'simu_income_v5n9':
+   Variables in data frame 'simu_income_v5n9'
+     Code: ID Q income mean sd
+     Docs: ID Q income sd sd
+```
+
+[codoc](https://rdrr.io/r/tools/codoc.html) does the following:
+
+> Find inconsistencies between actual and documented 'structure' of R objects in a package. codoc compares names and optionally also corresponding positions and default values of the arguments of functions. codocClasses and codocData compare slot names of S4 classes and variable names of data sets, respectively.
+
+
